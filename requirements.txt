@@ -1,0 +1,8 @@
+fast-bleu
+torchmetrics
+evaluate
+nltk
+tensorboard
+sentence_transformers
+hf_hub_ctranslate2
+jsonlines
