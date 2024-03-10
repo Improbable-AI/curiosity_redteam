@@ -19,7 +19,7 @@ export PYTHONPATH=$(pwd):$PYTHONPATH
 
 # Experiments
 
-The following are the basic steps to launch the red-teaming experiments. The results will be put at `results` directory. Note that you need to install `tensorboard` to log the results correctly. If the result directory exists, the expeirment will be terminated. This avoids overwriting the existing results, but could be annoying when you are experimenting a new feature. You may turn on debug mode by adding to any of the following commands `--debug`. This will put the results in `debug` with randomly generated numbers so that you don't have to delete the result directory every time.
+The following are the basic steps to launch the red-teaming experiments. The results will be put at `results` directory. Note that you need to install `tensorboard` to log the results correctly. If the result directory exists, the experiment will be terminated. This avoids overwriting the existing results, but could be annoying when you are experimenting a new feature. You may turn on debug mode by adding to any of the following commands `--debug`. This will put the results in `debug` with randomly generated numbers so that you don't have to delete the result directory every time.
 
 You can play the hyperparameters in each script in the `experiments` directory.
 
