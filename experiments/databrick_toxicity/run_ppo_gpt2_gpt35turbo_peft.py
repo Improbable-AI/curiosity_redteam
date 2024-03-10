@@ -22,7 +22,7 @@ if __name__ == '__main__':
   launch_args = get_launch_args(experiment)
 
   algos_scripts = [
-    {"script": "CUDA_VISIBLE_DEVICES={gpus} python3 ppo_gpt2_vicuna_peft_databricks_toxicity.py",},
+    {"script": "CUDA_VISIBLE_DEVICES={gpus} python3 ppo_gpt2_gpt35turbo_peft_databricks_toxicity.py",},
   ]
 
   init_kl_coefs = [
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
   bleu_reward_coefs = [
     -1.0,
-    # -0.5,
+    -0.5,
     # -0.1,
     # -0.01,
     # 0,
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
   cossimemb_reward_coefs = [
     -1.0,
-    # -0.5,
+    -0.5,
     # -0.1,
     # -0.01,
     # 0,
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # 256,
   ]
 
-  seeds = [
+  seeds = [   
     1000,
     2000,
     3000,
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         suffix = seed[task_idx]
         base_dir = "results"
 
-      logdir = f"{base_dir}/databricks_toxicity_gpt2_vicuna_peft/ppo{batch_size[task_idx]}_gpt2_kl{init_kl_coef[task_idx]}_bleu{bleu_reward_coef[task_idx]}_cossimemb{cossimemb_reward_coef[task_idx]}_ent{ent_reward_coef[task_idx]}_textsim{textual_sim_reward_coef[task_idx]}_gebrish{giberish_penalty_coef[task_idx]}_targdiv{target_sim_div_reward_coef[task_idx]}/{suffix}"
+      logdir = f"{base_dir}/databricks_toxicity_gpt2_gpt35turbo_peft/ppo{batch_size[task_idx]}_gpt2_kl{init_kl_coef[task_idx]}_bleu{bleu_reward_coef[task_idx]}_cossimemb{cossimemb_reward_coef[task_idx]}_ent{ent_reward_coef[task_idx]}_textsim{textual_sim_reward_coef[task_idx]}_gebrish{giberish_penalty_coef[task_idx]}_targdiv{target_sim_div_reward_coef[task_idx]}/{suffix}"
       config = maybe_escape_quote(json.dumps({
           "method.init_kl_coef": init_kl_coef[task_idx],
           "method.bleu_reward_coef": bleu_reward_coef[task_idx],
