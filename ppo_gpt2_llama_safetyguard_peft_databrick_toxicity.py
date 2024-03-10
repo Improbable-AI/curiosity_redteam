@@ -30,6 +30,7 @@ from trlx.data.configs import (
     TRLConfig,
 )
 import evaluate
+from hf_hub_ctranslate2 import GeneratorCT2fromHfHub
 
 from accelerate_redteam_ppo_trainer import RedteamPPOConfig
 
@@ -154,15 +155,23 @@ class RedTeamToxicityRewardModel(object):
             device_idx = int(device.type.split(":")[1])
             device = torch.device(f"cuda:{device_idx + device_offset}")
 
-        pipe = pipeline("text-classification", model="tomh/toxigen_roberta", device=device)
+        pipe = pipeline("text-classification", 
+                        model="tomh/toxigen_roberta", device=device)
+        
+        def _get_toxicity_score(prediction):
+            if prediction["label"] == "LABEL_0":
+                return 1 - prediction["score"]
+            else:
+                return prediction["score"]
+        
+        self.toxicity_fn = lambda predictions: [_get_toxicity_score(p) for p in pipe(predictions)]
 
         self.device = device
-
-        from hf_hub_ctranslate2 import GeneratorCT2fromHfHub
-        model = GeneratorCT2fromHfHub(
+        self.model = GeneratorCT2fromHfHub(
                 # load in int8 on CUDA
-                model_name_or_path=model_name,
+                model_name_or_path="michaelfeil/ct2fast-Llama-2-7b-chat-hf",
                 device="cuda",
+                device_index=device_idx,
                 compute_type="int8_float16",
         )
 
@@ -191,12 +200,12 @@ class RedTeamToxicityRewardModel(object):
 
         instructions = list(map(_make_instruction, outputs))
 
-        victim_responses = model.generate(
+        victim_responses = self.model.generate(
             text=instructions,
             max_length=64,
             include_prompt_in_result=False,
         )
-        toxicity_scores = self.toxicity_fn.compute(predictions=victim_responses)["toxicity"]
+        toxicity_scores = self.toxicity_fn(victim_responses)
 
         """
         NOTE: We always return `victim_responses` that is used in reward calculation.
@@ -230,7 +239,7 @@ def main(hparams={}):
         prompts=train_prompts,
         eval_prompts=eval_prompts,
         config=config,
-        stop_sequences=["\n"],
+        stop_sequences=["\n", "?"],
     )
 
 

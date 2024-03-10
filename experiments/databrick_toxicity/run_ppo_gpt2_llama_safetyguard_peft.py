@@ -22,7 +22,7 @@ if __name__ == '__main__':
   launch_args = get_launch_args(experiment)
 
   algos_scripts = [
-    {"script": "CUDA_VISIBLE_DEVICES={gpu1},{gpu2} python3 ppo_gpt2_llama-prompt-eng_peft_databrick_toxicity.py",},
+    {"script": "CUDA_VISIBLE_DEVICES={gpu1},{gpu2} python3 ppo_gpt2_llama_safetyguard_peft_databrick_toxicity.py",},
   ]
 
   init_kl_coefs = [
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # -0.01,
     # 0,
   ]
-# /ppo64_gpt2_kl0.001_bleu-0.1_cossimemb-0.1_ent0.001_textsim0_gebrish1.0
+
   cossimemb_reward_coefs = [
     -1.0,
     # -0.5,
@@ -118,8 +118,8 @@ if __name__ == '__main__':
     for task_idx in range(n_tasks):
       args = [
         algo_script[task_idx]["script"].format(
-          gpu1=0,# device, 
-          gpu2=1) # device + reward_model_device_offset),
+          gpu1=str(int(device)), 
+          gpu2=str(int(device) + reward_model_device_offset)),
       ]
       
       if launch_args.debug:
