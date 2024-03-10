@@ -9,7 +9,7 @@ Large language models (LLMs) hold great potential for various natural language a
 # Installation
 ```
 conda create -n redteam python=3.10
-git clone git@github.com:improbableai_lab/williamd4112/curiosity_redteam
+git clone git@github.com:Improbable-AI/curiosity_redteam.git
 cd custom_trlx
 pip install -e .
 cd ..
