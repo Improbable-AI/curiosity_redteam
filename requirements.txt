@@ -7,4 +7,4 @@ sentence_transformers
 hf_hub_ctranslate2
 jsonlines
 openai
-"fschat[model_worker,webui]"
+fschat[model_worker,webui]
